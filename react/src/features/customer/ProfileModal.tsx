@@ -53,7 +53,7 @@ export default function ProfileModal() {
   ];
 
   return <Dialog open={modal === "profile"} onOpenChange={(open) => { if (!open) close(); }}>
-    <DialogContent showCloseButton={false} overlayClassName="customer-overlay" className="customer-modal fixed bottom-0 left-1/2 top-auto grid max-h-[92dvh] w-full max-w-lg -translate-x-1/2 translate-y-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden rounded-b-none rounded-t-3xl p-5 sm:top-1/2 sm:bottom-auto sm:max-h-[90dvh] sm:max-w-lg sm:-translate-y-1/2 sm:rounded-3xl sm:p-7">
+    <DialogContent showCloseButton={false} overlayClassName="customer-overlay" className="customer-modal fixed bottom-0 left-1/2 top-auto grid max-h-[92dvh] w-full max-w-none -translate-x-1/2 translate-y-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden rounded-b-none rounded-t-3xl p-5 sm:top-1/2 sm:bottom-auto sm:max-h-[90dvh] sm:max-w-xl sm:-translate-y-1/2 sm:rounded-3xl sm:p-7">
       <div><div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-300 sm:hidden" /><div className="flex items-center justify-between border-b border-slate-100 pb-3.5"><h2 className="text-lg font-black text-slate-900 sm:text-xl">Şəxsi kabinet</h2><button type="button" onClick={close} aria-label="Bağla" className="flex size-8 items-center justify-center rounded-full bg-slate-100 text-slate-500"><X size={17} /></button></div></div>
       <div className="min-h-0 space-y-4 overflow-y-auto py-3 [scrollbar-width:none]">
         <div className="flex items-center gap-3.5 rounded-2xl border border-black/10 bg-gradient-to-r from-[#1f2024] via-[#2a2b30] to-[#121316] p-4 text-white shadow-md">

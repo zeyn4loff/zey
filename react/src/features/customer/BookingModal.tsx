@@ -43,7 +43,7 @@ export default function BookingModal() {
   }
 
   return <Dialog open={modal === "booking"} onOpenChange={(open) => { if (!open) close(); }}>
-    <DialogContent className="customer-modal max-h-[92dvh] w-[calc(100vw-1rem)] min-w-0 max-w-lg overflow-x-hidden overflow-y-auto rounded-3xl p-4 sm:p-6" overlayClassName="customer-overlay">
+    <DialogContent className="customer-modal max-h-[92dvh] w-[calc(100vw-1rem)] min-w-0 max-w-none overflow-x-hidden overflow-y-auto rounded-3xl p-4 sm:max-w-xl sm:p-6" overlayClassName="customer-overlay">
       <DialogHeader>
         <DialogTitle className="text-xl font-bold">{selectedSalon.name}</DialogTitle>
         <p className="text-xs text-slate-500">{selectedBranch?.address || selectedSalon.location}</p>

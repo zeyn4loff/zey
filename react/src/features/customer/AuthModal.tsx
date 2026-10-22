@@ -34,7 +34,7 @@ export default function AuthModal() {
     login(next);
   }
   return <><Dialog open={modal === "auth"} onOpenChange={(open) => { if (!open) { closeModal(); setError(""); setForgot(false); setLegalTab(null); } }}>
-    <DialogContent className="customer-modal max-h-[90vh] max-w-sm overflow-y-auto rounded-3xl border-0 p-6 shadow-2xl" overlayClassName="customer-overlay">
+    <DialogContent className="customer-modal max-h-[90vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-3xl border-0 p-6 shadow-2xl sm:max-w-md" overlayClassName="customer-overlay">
       <DialogHeader><DialogTitle className="text-lg font-bold">{forgot ? "Şifrəni bərpa et" : mode === "login" ? "Zeyvo-ya daxil ol" : "Yeni hesab yarat"}</DialogTitle>
         <p className="text-xs text-slate-500">{forgot ? "Bərpa üçün dəstək xidmətimizlə əlaqə saxlayın." : "Hazırda giriş lokal demo rejimində işləyir."}</p>
       </DialogHeader>

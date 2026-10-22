@@ -217,7 +217,7 @@ select:not([multiple]) {
 .customer-modal[data-closed] { animation: customer-modal-out 200ms ease-in both; }
 .customer-drawer[data-open] { animation: customer-drawer-in 260ms cubic-bezier(.2,.8,.2,1) both; }
 .customer-drawer[data-closed] { animation: customer-drawer-out 200ms ease-in both; }
-.customer-drawer { top: 0; right: 0; left: auto; translate: none; display: flex; width: min(100%, 28rem); max-width: none; height: 100dvh; flex-direction: column; gap: 1rem; border-radius: 0; padding: 1.5rem; }
+.customer-drawer { top: 0; right: 0; left: auto; translate: none; display: flex; width: min(100%, 32rem); max-width: none; height: 100dvh; flex-direction: column; gap: 1rem; border-radius: 0; padding: 1.5rem; }
 .customer-overlay[data-open] { animation: city-overlay-in 260ms ease-out both; }
 .customer-overlay[data-closed] { animation: city-overlay-out 200ms ease-in both; }
 @media (prefers-reduced-motion: reduce) {

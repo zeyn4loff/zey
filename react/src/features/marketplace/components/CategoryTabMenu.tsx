@@ -8,16 +8,16 @@ interface Props { activeId: string; onSelect: (id: string) => void }
 export default function CategoryTabMenu({ activeId, onSelect }: Props) {
   const [expanded, setExpanded] = useState(false);
   const activeExtraCategory = categories.slice(6).find((category) => category.id === activeId);
-  const cardClass = (active: boolean) => `flex h-25 w-full min-w-20 flex-col items-center justify-center gap-2 rounded-2xl border p-2 text-center shadow-sm transition-[background-color,border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 motion-reduce:transition-none ${active ? "border-yellow-primary bg-yellow-primary" : "border-slate-200 bg-white"}`;
+  const cardClass = (active: boolean) => `flex h-25 w-full min-w-20 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border p-2 text-center shadow-sm transition-[background-color,border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 disabled:cursor-default motion-reduce:transition-none ${active ? "border-yellow-primary bg-yellow-primary" : "border-slate-200 bg-white"}`;
   const categoryCard = (index: number, hidden = false) => {
     const category = categories[index];
     const Icon = categoryIcons[index]?.icon;
     return <button key={category.id} type="button" disabled={hidden} aria-pressed={activeId === category.id} onClick={() => onSelect(category.id)} className={cardClass(activeId === category.id)}>
       <span className="flex size-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-100">{Icon && <Icon size={22} strokeWidth={2} />}</span>
-      <span className="max-w-full truncate text-xs font-bold">{category.title}</span>
+      <span className="max-w-full truncate text-xs font-bold">{category.title[0].toLocaleUpperCase("az") + category.title.slice(1)}</span>
     </button>;
   };
-  const toggleButton = (label: string, hidden = false, showActive = false) => <button type="button" disabled={hidden} aria-expanded={expanded} aria-label={showActive ? `${label} seçilib — daha çox kateqoriya` : label} onClick={() => setExpanded((current) => !current)} className={`flex h-25 w-full min-w-20 flex-col items-center justify-center gap-2 rounded-2xl p-2 shadow-sm transition-[transform,background-color] duration-200 hover:-translate-y-0.5 motion-reduce:transition-none ${showActive ? "bg-yellow-primary text-primary hover:bg-yellow-300" : "bg-primary text-white hover:bg-[#2b2c30]"}`}>
+  const toggleButton = (label: string, hidden = false, showActive = false) => <button type="button" disabled={hidden} aria-expanded={expanded} aria-label={showActive ? `${label} seçilib — daha çox kateqoriya` : label} onClick={() => setExpanded((current) => !current)} className={`flex h-25 w-full min-w-20 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl p-2 shadow-sm transition-[transform,background-color] duration-200 hover:-translate-y-0.5 disabled:cursor-default motion-reduce:transition-none ${showActive ? "bg-yellow-primary text-primary hover:bg-yellow-300" : "bg-primary text-white hover:bg-[#2b2c30]"}`}>
     <span className="flex size-9 items-center justify-center rounded-xl bg-slate-100 text-primary"><Grid3X3 size={22} /></span>
     <span className="text-xs font-bold">{label}</span>
   </button>;

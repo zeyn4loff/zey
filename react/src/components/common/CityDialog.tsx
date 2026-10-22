@@ -30,7 +30,7 @@ export default function CityDialog({ open, onOpenChange, selectedCity, onSelectC
     }
 
     return <Dialog open={open} onOpenChange={(next) => next ? onOpenChange(true) : closeDialog()}>
-        <DialogContent overlayClassName="city-dialog-overlay" className="city-dialog-content max-w-90 rounded-[26px] border-0 bg-white p-6 text-black shadow-2xl motion-reduce:animate-none">
+        <DialogContent overlayClassName="city-dialog-overlay" className="city-dialog-content w-[calc(100vw-2rem)] sm:max-w-[26rem] rounded-[26px] border-0 bg-white p-6 text-black shadow-2xl motion-reduce:animate-none">
             <DialogHeader>
                 <DialogTitle className="text-left text-base font-bold">Şəhər seçin</DialogTitle>
             </DialogHeader>
