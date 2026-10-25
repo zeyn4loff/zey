@@ -13,7 +13,7 @@ export default function HeroBanner() {
             <div className="pt-3 pb-4 sm:pt-5 sm:pb-6 max-w-4xl">
                 <div>
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[-0.01em] leading-snug text-primary">Xidmətləri tap
-                        <span className="text-black/45"> və dərhal yazıl</span>
+                        <span className="text-black/45"> və qəbul üçün müraciət et</span>
                     </h1>
 
                     <form className="mt-2 flex w-full max-w-4xl items-center gap-2" onSubmit={(event) => { event.preventDefault(); navigate(query.trim() ? `/catalog?q=${encodeURIComponent(query.trim())}` : "/"); document.getElementById("salons")?.scrollIntoView({ behavior: "smooth" }); }}>

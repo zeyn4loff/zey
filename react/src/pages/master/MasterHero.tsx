@@ -18,7 +18,7 @@ export default function MasterHero({ master, salon, isFavorite, onToggleFavorite
         <div className="flex flex-wrap items-center gap-2"><h1 className="text-2xl font-bold sm:text-3xl">{master.name}</h1>{salon?.slots.length ? <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-700">● Boş saatlar var</span> : null}</div>
         <p className="mt-1 text-sm font-semibold text-slate-600">{master.title}{master.experience && <span className="font-normal"> · {master.experience}</span>}</p>
         {salon && <Link to={`/salon/${salon.id}`} className="mt-2 flex items-center gap-1 text-xs font-semibold hover:underline"><MapPin size={14} />{salon.name} <span className="font-normal text-slate-400">({salon.location}) →</span></Link>}
-        <p className="mt-3 flex items-center gap-1 text-sm font-bold"><span>{master.rating}</span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={13} className="fill-amber-400 text-amber-400" />)}</p>
+        <p className="mt-3 flex items-center gap-1 text-sm font-bold">{master.rating ? <><span>{master.rating}</span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={13} className={index < Math.round(master.rating) ? "fill-amber-400 text-amber-400" : "text-slate-300"} />)}</> : <span className="font-normal text-slate-500">Hələ rəy yoxdur</span>}</p>
       </div>
       <div className="flex gap-2">
         <button type="button" onClick={onToggleFavorite} aria-pressed={isFavorite} aria-label={isFavorite ? "Sevimlilərdən çıxar" : "Sevimlilərə əlavə et"} className="flex size-10 items-center justify-center rounded-xl border border-slate-200"><Heart size={18} className={isFavorite ? "fill-rose-500 text-rose-500" : ""} /></button>

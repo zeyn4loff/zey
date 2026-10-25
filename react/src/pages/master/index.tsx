@@ -2,26 +2,27 @@ import { Link, useParams } from "react-router";
 import Breadcrumbs from "@/features/marketplace/components/Breadcrumbs";
 import BookingSlots from "@/features/marketplace/components/BookingSlots";
 import ServiceList from "@/features/marketplace/components/ServiceList";
-import { findSalonForSpecialist, specialists, type Service } from "@/features/marketplace/data";
+import { findSalonForSpecialist, type Service } from "@/features/marketplace/data";
 import { useCustomer } from "@/features/customer/useCustomer";
+import { getPublicSalons, getPublicSpecialists } from "@/features/marketplace/publicCatalog";
 import MasterHero from "./MasterHero";
 import PhotoGallery from "@/features/marketplace/components/PhotoGallery";
 import LocalReviews from "@/features/marketplace/components/LocalReviews";
 
 export default function MasterPage() {
   const { id } = useParams();
-  const master = specialists.find((item) => item.id === Number(id));
+  const master = getPublicSpecialists().find((item) => item.id === Number(id));
   const { favoriteMasterIds, toggleMasterFavorite, openBooking } = useCustomer();
 
   if (!master) return <div className="container mx-auto px-4 py-16 text-center"><h1 className="text-2xl font-bold">Usta tapılmadı</h1><Link to="/masters" className="mt-4 inline-block underline">Ustalara qayıt</Link></div>;
 
-  const salon = findSalonForSpecialist(master);
+  const salon = getPublicSalons().find((item) => item.id === master.salonId) ?? findSalonForSpecialist(master);
   const book = (service?: Service) => { if (salon) openBooking(salon, master, service); };
   const portfolio = master.portfolio?.length ? master.portfolio : salon ? [
-    { src: master.photo, label: `${master.name} — nümunə şəkil`, type: "works" as const },
+    { src: master.photo, label: `${master.name}`, type: "works" as const },
     { src: salon.image, label: `${salon.name} — məkan`, type: "works" as const },
-    { src: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80", label: "Nümunə iş", type: "works" as const },
-    { src: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80", label: "Nümunə dizayn", type: "works" as const },
+    { src: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80", label: "İş nümunəsi", type: "works" as const },
+    { src: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80", label: "Dizayn", type: "works" as const },
   ] : [];
 
   return (
@@ -41,7 +42,7 @@ export default function MasterPage() {
             </section>
             <ServiceList services={master.services || salon.services} onBook={book} />
           </>}
-          {portfolio.length ? <div><PhotoGallery images={portfolio} title="Portfolio" />{!master.portfolio?.length && <p className="mt-2 px-2 text-xs text-slate-500">Şəkillər prototipdən götürülmüş nümunələrdir.</p>}</div> : <section className="rounded-3xl border border-slate-200 bg-white p-5"><h2 className="text-lg font-bold">Portfolio</h2><p className="mt-2 text-sm text-slate-500">İş nümunələri hələ əlavə edilməyib.</p></section>}
+          {portfolio.length ? <div><PhotoGallery images={portfolio} title="Portfolio" /></div> : <section className="rounded-3xl border border-slate-200 bg-white p-5"><h2 className="text-lg font-bold">Portfolio</h2><p className="mt-2 text-sm text-slate-500">İş nümunələri hələ əlavə edilməyib.</p></section>}
           <LocalReviews subject={`master-${master.id}`} title="Rəylər" />
         </div>
         {salon && <BookingSlots slots={salon.slots} title="Ustanın qəbuluna yazıl" description="Zəng etmədən boş vaxtı seçin" buttonLabel="Qəbula yazıl →" onBook={book} onSlotClick={(time, date) => openBooking(salon, master, undefined, time, undefined, date)} />}

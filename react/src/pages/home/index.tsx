@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router";
 import CategoryTabMenu from "@/features/marketplace/components/CategoryTabMenu";
 import BeautyCategories from "./components/BeautyCategories";
 import BeautyLocation from "./components/BeautyLocation";
 import PopularPartners from "./components/PopularPartners";
 import SelectMasters from "./components/SelectMasters";
-import { categories, salons, specialists } from "@/features/marketplace/data";
+import { categories } from "@/features/marketplace/data";
+import { getCatalogSalons, getPublicSpecialists, useMarketplaceRevision } from "@/features/marketplace/publicCatalog";
 import { useCustomer } from "@/features/customer/useCustomer";
 import { useLocationCity } from "@/features/location/useLocationCity";
 
@@ -17,13 +18,14 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("default");
   const { favoriteSalonIds, toggleSalonFavorite, openBooking } = useCustomer();
   const { city } = useLocationCity();
+  useMarketplaceRevision();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = (searchParams.get("q") || "").trim().toLocaleLowerCase("az");
   const category = categories.find((item) => item.id === selectedCategoryId) || categories[0];
 
-  const visibleSalons = useMemo(() => {
-    const filtered = salons.filter((salon) =>
-      city === "Bakı" && salon.topCategory === selectedCategoryId &&
+  const visibleSalons = (() => {
+    const filtered = getCatalogSalons().filter((salon) =>
+      (salon.city || "Bakı") === city && salon.topCategory === selectedCategoryId &&
       (!selectedSubcategoryId || salon.category === selectedSubcategoryId) &&
       (!query || [salon.name, salon.tag, salon.location, ...salon.services.map((service) => service.name)]
         .some((value) => value.toLocaleLowerCase("az").includes(query)))
@@ -33,9 +35,12 @@ export default function Home() {
       : sortOrder === "price"
         ? (a.services[0]?.price || 0) - (b.services[0]?.price || 0)
         : b.reviewsCount - a.reviewsCount);
-  }, [city, selectedCategoryId, selectedSubcategoryId, query, sortOrder]);
+  })();
 
-  const visibleSpecialists = city === "Bakı" ? specialists.filter((item) => item.topCategory === selectedCategoryId).slice(0, 4) : [];
+  const publicSalons = getCatalogSalons();
+  const visibleSpecialists = getPublicSpecialists().filter((item) =>
+    item.topCategory === selectedCategoryId && (publicSalons.find((salon) => salon.id === item.salonId)?.city || "Bakı") === city,
+  ).slice(0, 4);
 
   return (
     <div className="container mx-auto my-8 px-4 sm:my-12">

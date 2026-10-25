@@ -1,0 +1,15 @@
+import type { Dispatch, SetStateAction } from "react";
+import { Trash2 } from "lucide-react";
+import type { StaffMember } from "../staff/staff";
+import { formatMoney, payrollPaid, type FinanceData } from "./finance";
+import { panel, type DeleteSetter } from "./FinanceViewShared";
+
+type PayrollProps = {
+  data: FinanceData;
+  staff: StaffMember[];
+  setPayrollDialog: Dispatch<SetStateAction<"accrue" | "pay" | null>>;
+  setDeleting: DeleteSetter;
+};
+export function FinancePayrollView({ data, staff, setPayrollDialog, setDeleting }: PayrollProps) {
+  return <><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="text-lg font-bold">Maaş və komissiya</h3><p className="text-sm text-slate-500">Hesablamalar əl ilə aparılır; ödənişlər xərc jurnalına yazılır.</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={() => setPayrollDialog("accrue")} disabled={!staff.length} className="min-h-11 flex-1 cursor-pointer rounded-xl bg-yellow-primary px-4 text-sm font-bold disabled:opacity-40 sm:flex-none">Maaş hesabla</button><button type="button" onClick={() => setPayrollDialog("pay")} disabled={!data.payroll.some((x) => x.amount > payrollPaid(data, x.id))} className="min-h-11 flex-1 cursor-pointer rounded-xl bg-slate-900 px-4 text-sm font-bold text-white disabled:opacity-40 sm:flex-none">Ödəniş et</button></div></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{[{ title: "Hesablanıb", value: data.payroll.reduce((sum, x) => sum + x.amount, 0) }, { title: "Ödənilib", value: data.payroll.reduce((sum, x) => sum + payrollPaid(data, x.id), 0) }, { title: "Qalıq borc", value: data.payroll.reduce((sum, x) => sum + x.amount - payrollPaid(data, x.id), 0) }].map((x) => <div key={x.title} className={panel}><p className="text-xs text-slate-500">{x.title}</p><strong className="mt-2 block break-words text-lg">{formatMoney(x.value)}</strong></div>)}</div><div className="space-y-2">{data.payroll.map((item) => { const paid = payrollPaid(data, item.id); return <article key={item.id} className={panel}><div className="flex items-start justify-between gap-2"><div className="min-w-0"><h4 className="break-words font-bold">{staff.find((x) => x.id === item.staffId)?.name ?? "Əməkdaş silinib"}</h4><p className="text-xs text-slate-500">{item.period} · Hesablanıb: {formatMoney(item.amount)}</p><p className="mt-2 text-sm">Ödənilib: {formatMoney(paid)} · <strong>Qalıq: {formatMoney(Math.max(0, item.amount - paid))}</strong></p>{item.note && <p className="mt-1 break-words text-xs text-slate-500">{item.note}</p>}</div><button type="button" onClick={() => setDeleting({ kind: "payroll", id: item.id, name: `${item.period} maaş hesabı` })} aria-label={`${item.period} maaş hesabını sil`} className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-xl text-slate-500 hover:bg-rose-50 hover:text-rose-700"><Trash2 size={17} /></button></div></article>; })}{!data.payroll.length && <div className={`${panel} py-10 text-center text-sm text-slate-500`}>Hələ maaş hesablanmayıb.</div>}</div></>;
+}

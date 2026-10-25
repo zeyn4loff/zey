@@ -1,6 +1,5 @@
 import type {Partner} from "@/types";
 import {Link} from "react-router";
-import {Star} from "lucide-react";
 
 export function PartnerCard({ partner }: { partner: Partner }) {
     return (
@@ -23,9 +22,6 @@ export function PartnerCard({ partner }: { partner: Partner }) {
                 </h3>
 
                 <p className="flex items-center justify-center gap-1 text-[11px] text-slate-400">
-                    <Star className="size-3 fill-amber-400 text-amber-400" />
-                    <span>{partner.rating}</span>
-                    <span aria-hidden="true">•</span>
                     <span>{partner.meta}</span>
                 </p>
             </div>

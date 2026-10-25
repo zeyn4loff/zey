@@ -1,5 +1,5 @@
-import { findSalonForSpecialist, specialists, type Category } from "@/features/marketplace/data";
-import { catalogSalons } from "@/features/marketplace/publicCatalog";
+import { findSalonForSpecialist, type Category } from "@/features/marketplace/data";
+import { getCatalogSalons, getPublicSpecialists } from "@/features/marketplace/publicCatalog";
 import type { CatalogResult, ResultType, SortOrder } from "./catalogTypes";
 
 interface Options {
@@ -13,6 +13,7 @@ interface Options {
 
 export function getCatalogResults({ city, category, subcategoryId, query, resultType, sort }: Options): CatalogResult[] {
   const normalizedQuery = query.trim().toLocaleLowerCase("az");
+  const catalogSalons = getCatalogSalons();
   const matchedSalons = catalogSalons.filter((item) =>
     (item.city || "Bakı") === city &&
     (!category || item.topCategory === category.id) &&
@@ -21,8 +22,8 @@ export function getCatalogResults({ city, category, subcategoryId, query, result
       .some((value) => value.toLocaleLowerCase("az").includes(normalizedQuery)))
   ).sort((a, b) => sort === "rating" ? b.rating - a.rating : sort === "price" ? (a.services[0]?.price || 0) - (b.services[0]?.price || 0) : b.reviewsCount - a.reviewsCount);
 
-  const matchedMasters = specialists.filter((item) =>
-    (findSalonForSpecialist(item)?.city || "Bakı") === city &&
+  const matchedMasters = getPublicSpecialists().filter((item) =>
+    (catalogSalons.find((salon) => salon.id === item.salonId)?.city || findSalonForSpecialist(item)?.city || "Bakı") === city &&
     (!category || item.topCategory === category.id) &&
     !subcategoryId &&
     (!normalizedQuery || [item.name, item.title, item.salonName]

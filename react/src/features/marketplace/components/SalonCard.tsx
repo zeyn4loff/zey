@@ -32,9 +32,9 @@ export default function SalonCard({ item, isFavorite, onToggleFavorite, onBook }
           </h3>
           <p className="mt-1 line-clamp-1 text-sm text-slate-500">{item.tag}</p>
         </div>
-        <span className="flex shrink-0 items-center gap-1 text-sm font-bold text-primary" aria-label={`${item.rating} reytinq`}>
+        {item.reviewsCount > 0 && <span className="flex shrink-0 items-center gap-1 text-sm font-bold text-primary" aria-label={`${item.rating} reytinq`}>
           <Star size={15} className="fill-amber-400 text-amber-400" />{item.rating}
-        </span>
+        </span>}
       </div>
 
       <p className="mt-3 flex min-w-0 items-center gap-1.5 text-sm text-slate-500">
@@ -43,7 +43,7 @@ export default function SalonCard({ item, isFavorite, onToggleFavorite, onBook }
       </p>
 
       <div className="mt-auto flex items-end justify-between gap-3 pt-5">
-        <span className="text-xs text-slate-500">{item.reviewsCount} rəy</span>
+        <span className="text-xs text-slate-500">{item.reviewsCount ? `${item.reviewsCount} rəy` : "Hələ rəy yoxdur"}</span>
         {startingPrice !== null && <span className="shrink-0 text-sm font-bold text-primary">{startingPrice} ₼-dan</span>}
       </div>
     </div>

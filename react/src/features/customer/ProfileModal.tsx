@@ -1,12 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { CalendarDays, Camera, LogOut, Star, UserRound, X } from "lucide-react";
+import { Camera, LogOut, UserRound, X } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { findSalonForSpecialist, specialists } from "@/features/marketplace/data";
-import { publicSalons } from "@/features/marketplace/publicCatalog";
+import { getPublicSalons, getPublicSpecialists } from "@/features/marketplace/publicCatalog";
 import { cities } from "@/features/location/cities";
 import { formatPhone } from "./formatPhone";
 import { useCustomer } from "./useCustomer";
+import { ProfileBookings, ProfileFavorites, ProfileSecurity } from "./ProfileSections";
 
 type Tab = "info" | "bookings" | "favorites" | "security";
 const inputClass = "mt-1 h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-semibold text-slate-900 outline-none focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-yellow-primary/40";
@@ -21,8 +21,8 @@ export default function ProfileModal() {
   const [notice, setNotice] = useState("");
   if (!user) return null;
 
-  const favoriteSalons = publicSalons.filter((item) => favoriteSalonIds.includes(item.id));
-  const favoriteMasters = specialists.filter((item) => favoriteMasterIds.includes(item.id));
+  const favoriteSalons = getPublicSalons().filter((item) => favoriteSalonIds.includes(item.id));
+  const favoriteMasters = getPublicSpecialists().filter((item) => favoriteMasterIds.includes(item.id));
   const favoriteCount = favoriteSalons.length + favoriteMasters.length;
   const selectedGender = gender ?? user.gender ?? null;
   const phoneValue = phone ?? formatPhone(user.phone || "");
@@ -70,13 +70,9 @@ export default function ProfileModal() {
           <label className="block text-xs font-bold text-slate-500">Şəhər<select name="city" defaultValue={user.city || "Bakı"} className={inputClass}>{cities.map((city) => <option key={city.name} value={city.name}>{city.name}</option>)}</select></label>
           <button type="submit" className="h-10 w-full rounded-xl bg-yellow-primary text-xs font-black text-slate-900 hover:bg-yellow-300">Dəyişiklikləri yadda saxla</button>
         </form>}
-        {tab === "bookings" && <div className="space-y-2.5">{bookings.length ? bookings.map((booking) => <article key={booking.id} className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3.5"><div className="min-w-0"><strong className="block truncate text-xs">{booking.salonName}</strong>{booking.masterName && <p className="truncate text-[11px] font-bold text-slate-600">{booking.masterName}</p>}<p className="truncate text-[11px] text-slate-500">{booking.service}</p><p className="mt-1 text-[11px] font-bold">{booking.date}, {booking.time}</p></div><button type="button" onClick={() => cancelBooking(booking.id)} className="shrink-0 rounded-lg bg-red-50 px-2.5 py-1.5 text-[11px] font-bold text-red-600">Ləğv et</button></article>) : <div className="py-8 text-center"><CalendarDays className="mx-auto mb-2 size-12 rounded-2xl bg-slate-100 p-3 text-slate-400" /><p className="text-xs font-bold text-slate-600">Aktiv görüşünüz yoxdur</p><p className="mt-1 text-[11px] text-slate-400">Xidmət seçərək onlayn yazıla bilərsiniz</p><button type="button" onClick={() => { close(); navigate("/catalog"); }} className="mt-3 rounded-xl bg-yellow-primary px-4 py-2 text-xs font-black">Kataloqa bax</button></div>}</div>}
-        {tab === "favorites" && <div className="space-y-3">
-          {favoriteSalons.map((item) => <article key={`s-${item.id}`} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3"><button type="button" onClick={() => { close(); navigate(`/salon/${item.id}`); }} className="flex min-w-0 flex-1 items-center gap-3 text-left"><img src={item.image} alt="" className="size-12 shrink-0 rounded-xl object-cover" /><span className="min-w-0"><strong className="block truncate text-xs">{item.name}</strong><span className="block truncate text-[10px] text-slate-400">{item.tag}</span><span className="mt-0.5 flex items-center gap-1 text-[10px] font-bold text-amber-500"><Star size={11} fill="currentColor" /> {item.rating} · Salon</span></span></button><button type="button" onClick={() => openBooking(item)} className="rounded-xl bg-yellow-primary px-2.5 py-1.5 text-[11px] font-black">Yazıl</button><button type="button" onClick={() => toggleSalonFavorite(item.id)} aria-label={`${item.name} sil`} className="flex size-7 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={15} /></button></article>)}
-          {favoriteMasters.map((item) => { const salon = findSalonForSpecialist(item); return <article key={`m-${item.id}`} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3"><button type="button" onClick={() => { close(); navigate(`/master/${item.id}`); }} className="flex min-w-0 flex-1 items-center gap-3 text-left"><img src={item.photo} alt="" className="size-12 shrink-0 rounded-xl object-cover" /><span className="min-w-0"><strong className="block truncate text-xs">{item.name}</strong><span className="block truncate text-[10px] text-slate-400">{item.title}</span><span className="mt-0.5 flex items-center gap-1 text-[10px] font-bold text-amber-500"><Star size={11} fill="currentColor" /> {item.rating} · Usta</span></span></button>{salon && <button type="button" onClick={() => openBooking(salon, item)} className="rounded-xl bg-yellow-primary px-2.5 py-1.5 text-[11px] font-black">Yazıl</button>}<button type="button" onClick={() => toggleMasterFavorite(item.id)} aria-label={`${item.name} sil`} className="flex size-7 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={15} /></button></article>; })}
-          {favoriteCount === 0 && <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center"><p className="text-xs font-bold">Seçilmiş salon və usta yoxdur</p><p className="mt-1 text-[11px] text-slate-400">Kataloqdan bəyəndiyiniz məkanları ürək işarəsi ilə seçin.</p></div>}
-        </div>}
-        {tab === "security" && <div className="space-y-3"><label className="block text-xs font-bold text-slate-500">Hazırkı şifrə<input type="password" disabled placeholder="••••••••" className={inputClass} /></label><label className="block text-xs font-bold text-slate-500">Yeni şifrə<input type="password" disabled placeholder="Minimum 6 simvol" className={inputClass} /></label><button type="button" disabled className="h-10 w-full rounded-xl bg-yellow-primary text-xs font-black opacity-50">Şifrəni yenilə</button><p className="text-[11px] text-slate-500">Şifrənin dəyişdirilməsi server qoşulduqda işləyəcək.</p></div>}
+        {tab === "bookings" && <ProfileBookings bookings={bookings} onCancel={cancelBooking} onExplore={() => { close(); navigate("/catalog"); }} />}
+        {tab === "favorites" && <ProfileFavorites salons={favoriteSalons} masters={favoriteMasters} onOpenSalon={(id) => { close(); navigate(`/salon/${id}`); }} onOpenMaster={(id) => { close(); navigate(`/master/${id}`); }} onBook={openBooking} onRemoveSalon={toggleSalonFavorite} onRemoveMaster={toggleMasterFavorite} />}
+        {tab === "security" && <ProfileSecurity />}
       </div>
       <div className="flex items-center justify-between border-t border-slate-100 pt-3"><button type="button" onClick={logout} className="inline-flex items-center gap-1.5 rounded-xl bg-red-50 px-4 py-2 text-xs font-bold text-red-600"><LogOut size={16} /> Hesabdan çıxış</button><button type="button" onClick={close} className="rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600">Bağla</button></div>
     </DialogContent>

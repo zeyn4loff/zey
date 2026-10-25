@@ -1,8 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumbs from "@/features/marketplace/components/Breadcrumbs";
 import ServiceList from "@/features/marketplace/components/ServiceList";
-import { getSpecialistsForSalon } from "@/features/marketplace/data";
-import { publicSalons } from "@/features/marketplace/publicCatalog";
+import { getPublicSalons, getPublicSpecialists, useMarketplaceRevision } from "@/features/marketplace/publicCatalog";
 import { useCustomer } from "@/features/customer/useCustomer";
 import SalonHero from "./SalonHero";
 import SalonSpecialists from "./SalonSpecialists";
@@ -16,13 +15,14 @@ import { useState } from "react";
 export default function SalonPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const salon = publicSalons.find((item) => item.id === Number(id));
+  useMarketplaceRevision();
+  const salon = getPublicSalons().find((item) => item.id === Number(id));
   const [branchId, setBranchId] = useState<string | null>(null);
   const { favoriteSalonIds, toggleSalonFavorite, openBooking } = useCustomer();
 
   if (!salon) return <div className="container mx-auto px-4 py-16 text-center"><h1 className="text-2xl font-bold">Məkan tapılmadı</h1><Link to="/catalog" className="mt-4 inline-block underline">Kataloqa qayıt</Link></div>;
 
-  const specialists = getSpecialistsForSalon(salon);
+  const specialists = getPublicSpecialists().filter((item) => item.salonId === salon.id);
   const gallery = salon.gallery?.length ? salon.gallery : getDemoGallery(salon);
   const branches = getPublicBranches(salon);
   const selectedBranch = branches.find((branch) => branch.id === branchId) || branches[0];
@@ -33,7 +33,7 @@ export default function SalonPage() {
       <div className="flex items-center gap-2"><button type="button" onClick={() => navigate(-1)} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold sm:hidden">← Geri</button><Breadcrumbs items={[{ label: "Kataloq", to: "/catalog" }, { label: salon.name }]} /></div>
       <SalonHero salon={salon} branchName={selectedBranch.name} location={selectedBranch.address} hours={selectedBranch.hours} phone={selectedBranch.phone} isFavorite={favoriteSalonIds.includes(salon.id)} onToggleFavorite={() => toggleSalonFavorite(salon.id)} onBook={book} />
       <SalonDetails salon={salon} branches={branches} selectedBranch={selectedBranch} onSelectBranch={setBranchId} />
-      <div><PhotoGallery images={gallery.length ? gallery : [{ src: salon.image, label: salon.name }]} title="Fotoqalereya" />{!salon.gallery?.length && <p className="mt-2 px-2 text-xs text-slate-500">Şəkillər prototipdən götürülmüş nümunələrdir.</p>}</div>
+      <PhotoGallery images={gallery.length ? gallery : [{ src: salon.image, label: salon.name }]} title="Fotoqalereya" />
       <SalonSpecialists specialists={specialists} />
       <ServiceList services={salon.services} onBook={book} />
       <LocalReviews subject={`salon-${salon.id}`} title="Müştəri rəyləri" />

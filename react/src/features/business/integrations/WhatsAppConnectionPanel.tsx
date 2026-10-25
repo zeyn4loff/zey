@@ -1,0 +1,5 @@
+import { QrCode, Smartphone } from "lucide-react";
+
+export default function WhatsAppConnectionPanel() {
+  return <section className="grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:grid-cols-[1fr_180px]" aria-labelledby="whatsapp-connection-title"><div><h3 id="whatsapp-connection-title" className="font-bold">Telefonla qoşulma</h3><p className="mt-1 text-sm leading-6 text-slate-600">WhatsApp tətbiqində <strong>Bağlı cihazlar</strong> bölməsini açın və <strong>Cihazı bağlayın</strong> seçin. Bağlantı kodu hazır olduqda burada görünəcək.</p><div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><Smartphone size={18} className="mt-0.5 shrink-0" /><p>Hazırda qoşulma xidməti əlçatan deyil. Kod yaradılmayıb və hesabınız bağlı sayılmır.</p></div></div><div className="flex min-h-44 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-center"><QrCode size={48} className="text-slate-300" aria-hidden="true" /><span className="mt-2 text-xs font-semibold text-slate-500">Bağlantı kodu gözlənilir</span></div></section>;
+}

@@ -22,9 +22,6 @@ export default function Footer() {
                             Azərbaycanda xidmətləri kəşf etmək və onlayn rezervasiya etmək üçün rəqəmsal platforma.
                         </p>
 
-                        <p className="text-xs font-medium text-gray-400">
-                            © {currentYear} Zeyvo Inc.
-                        </p>
                     </div>
 
                     {/* Users */}
@@ -37,6 +34,7 @@ export default function Footer() {
                             <li><Link to="/catalog" className="hover:text-black">Kataloq</Link></li>
                             <li><Link to="/masters" className="hover:text-black">Ustalar</Link></li>
                             <li><Link to="/cities" className="hover:text-black">Şəhər seçimi</Link></li>
+                            <li><Link to="/for-business" className="hover:text-black">Partnyorlar üçün</Link></li>
                         </ul>
                     </div>
 

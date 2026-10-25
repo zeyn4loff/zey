@@ -1,0 +1,18 @@
+import { Armchair, DoorOpen, Pencil, Trash2, Zap } from "lucide-react";
+import { type Resource, type ResourceStatus, statusLabels, typeLabels } from "./resources";
+const typeIcon = { chair: Armchair, room: DoorOpen, device: Zap };
+const statusStyle: Record<ResourceStatus, string> = { active: "bg-emerald-50 text-emerald-700", busy: "bg-amber-50 text-amber-800", maintenance: "bg-rose-50 text-rose-700" };
+type Props = { item: Resource; branchLabel: Map<string,string>; onStatus: (id: string, status: ResourceStatus) => void; onEdit: (item: Resource) => void; onDelete: (item: Resource) => void };
+export default function ResourceRow({ item, branchLabel, onStatus, onEdit, onDelete }: Props) {
+    const Icon = typeIcon[item.type];
+    return <article className="flex flex-wrap items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:flex-nowrap lg:items-center lg:py-2">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white text-slate-600 lg:size-7"><Icon size={18} /></span>
+      <div className="min-w-0 flex-1 lg:flex lg:items-center lg:gap-2">
+        <span className="hidden shrink-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 lg:inline">{typeLabels[item.type]}</span>
+        <strong className="block break-words text-sm">{item.name}</strong>
+        <p className="mt-1 break-words text-xs text-slate-500 lg:hidden">{typeLabels[item.type]} · {branchLabel.get(item.branchId) ?? (item.branchId ? "Əvvəlki filial" : "Filiala bağlı deyil")}</p>
+        {item.notes && <p className="mt-1 break-words text-xs text-slate-500 lg:hidden">{item.notes}</p>}
+      </div>
+      <div className="ml-auto flex max-w-full flex-wrap items-center gap-1"><select aria-label={`${item.name} statusu`} value={item.status} onChange={(event) => onStatus(item.id, event.target.value as ResourceStatus)} className={`h-9 max-w-32 cursor-pointer rounded-lg px-1.5 text-[11px] font-bold ${statusStyle[item.status]}`}>{(Object.keys(statusLabels) as ResourceStatus[]).map((status) => <option value={status} key={status}>{statusLabels[status]}</option>)}</select><button type="button" onClick={() => onEdit(item)} aria-label={`${item.name} redaktə et`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-white"><Pencil size={16} /></button><button type="button" onClick={() => onDelete(item)} aria-label={`${item.name} sil`} className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600"><Trash2 size={16} /></button></div>
+    </article>;
+  }

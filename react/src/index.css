@@ -3,6 +3,10 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+.business-header-title:has(.business-header-title-override:not(:empty)) .business-header-title-default {
+    display: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -222,4 +226,10 @@ select:not([multiple]) {
 .customer-overlay[data-closed] { animation: city-overlay-out 200ms ease-in both; }
 @media (prefers-reduced-motion: reduce) {
   .customer-modal[data-open], .customer-modal[data-closed], .customer-drawer[data-open], .customer-drawer[data-closed], .customer-overlay[data-open], .customer-overlay[data-closed] { animation: none; }
+}
+
+@media print {
+  body:has(.pos-print-receipt) * { visibility: hidden !important; }
+  .pos-print-receipt, .pos-print-receipt * { visibility: visible !important; }
+  .pos-print-receipt { position: fixed; inset: 0; width: 100%; box-shadow: none; }
 }

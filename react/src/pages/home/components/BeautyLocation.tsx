@@ -17,7 +17,7 @@ interface Props {
 
 export default function BeautyLocation({ category, items, sortOrder, onSortChange, favoriteIds, onToggleFavorite, onBook, query, onClearFilters }: Props) {
   return <section id="salons" className="my-8 scroll-mt-5">
-    <SectionHeader title={`${category.azName} məkanları`} subtitle={`${items.length} məkan`} description="Onlayn rezervasiya və zəngsiz dərhal təsdiqləmə">
+    <SectionHeader title={`${category.azName} məkanları`} subtitle={`${items.length} məkan`} description="Onlayn müraciət edin, məkan təsdiqlədikdən sonra qəbula gedin">
       <label className="sr-only" htmlFor="sort-salons">Sıralama</label>
       <select id="sort-salons" value={sortOrder} onChange={(event) => onSortChange(event.target.value as SortOrder)} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold">
         <option value="default">Populyarlığa görə</option>

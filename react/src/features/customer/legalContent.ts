@@ -3,17 +3,17 @@ export const content: Record<LegalTab, { title: string; paragraphs: string[] }> 
   terms: {
     title: "İstifadəçi şərtləri",
     paragraphs: [
-      "Zeyvo-nun bu versiyası xidmətləri və mütəxəssisləri göstərən lokal demodur. Burada edilən rezervasiyalar real xidmət təminatçısına göndərilmir.",
-      "Demo hesab və rezervasiya məlumatları yalnız istifadə etdiyiniz brauzerdə saxlanılır. Brauzer məlumatlarını sildikdə bu məlumatlar da silinə bilər.",
-      "Göstərilən qiymətlər, boş vaxtlar və məkan məlumatları nümunə xarakterlidir. Real rezervasiya və ödəniş funksiyaları qoşulduqda şərtlər yenilənməlidir.",
+      "Rezervasiyalar bu cihazın brauzerində saxlanılır və xidmət təminatçısına avtomatik göndərilmir. Qəbulu təsdiqləmək üçün məkanla birbaşa əlaqə saxlayın.",
+      "Hesab və rezervasiya məlumatları yalnız istifadə etdiyiniz brauzerdə saxlanılır. Brauzer məlumatlarını sildikdə bu məlumatlar da silinə bilər.",
+      "Göstərilən qiymətləri və boş vaxtları xidmət təminatçısı ilə dəqiqləşdirin. Bu saytda ödəniş qəbul edilmir.",
     ],
   },
   privacy: {
     title: "Məxfilik",
     paragraphs: [
-      "Bu demo ad, e-poçt, telefon, şəhər, seçilmişlər və rezervasiya məlumatlarını brauzerinizin lokal yaddaşında saxlayır.",
-      "Daxil etdiyiniz şifrə saxlanmır və serverə göndərilmir. Hazırda həqiqi hesab təsdiqi və şifrə bərpası mövcud deyil.",
-      "Eyni brauzerdən istifadə edən digər şəxslər saxlanmış demo məlumatlarını görə bilər. Lokal məlumatları silmək üçün brauzerinizin sayt məlumatlarını təmizləyin.",
+      "Ad, e-poçt, telefon, şəhər, seçilmişlər və rezervasiya məlumatları istifadə etdiyiniz brauzerdə saxlanılır.",
+      "Şifrəniz brauzerdə açıq mətn kimi saxlanılmır; giriş üçün onun duzlanmış heşi saxlanılır. Hesab məlumatları serverə göndərilmir və e-poçt vasitəsilə şifrə bərpası hələ mövcud deyil.",
+      "Bu cihazdan istifadə edən digər şəxslər saxlanmış məlumatları görə bilər. Onları silmək üçün brauzerin sayt məlumatlarını təmizləyin.",
     ],
   },
 };

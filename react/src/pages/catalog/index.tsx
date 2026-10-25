@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import CategoryTabMenu from "@/features/marketplace/components/CategoryTabMenu";
 import Breadcrumbs from "@/features/marketplace/components/Breadcrumbs";
 import { categories } from "@/features/marketplace/data";
+import { useMarketplaceRevision } from "@/features/marketplace/publicCatalog";
 import { useLocationCity } from "@/features/location/useLocationCity";
 import CatalogFilters from "./CatalogFilters";
 import CatalogIntro from "./CatalogIntro";
@@ -18,11 +19,12 @@ export default function CatalogPage() {
   const [sort, setSort] = useState<SortOrder>("popular");
   const [visibleCount, setVisibleCount] = useState(12);
   const { city } = useLocationCity();
+  useMarketplaceRevision();
   // The catalog opens in the beauty category when no category is specified.
   const category = categories.find((item) => item.id === categoryId) ?? categories[0];
   const subcategory = category?.subcategories.find((item) => item.id === subcategoryId);
   const query = params.get("q") || "";
-  const results = useMemo(() => getCatalogResults({ city, category, subcategoryId: subcategory?.id, query, resultType, sort }), [city, category, subcategory?.id, query, resultType, sort]);
+  const results = getCatalogResults({ city, category, subcategoryId: subcategory?.id, query, resultType, sort });
   const title = subcategory?.azName || category?.azName || "Kataloq";
 
   function updateQuery(value: string) {

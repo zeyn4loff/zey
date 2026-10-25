@@ -9,6 +9,8 @@ export interface Category {
 
 export interface Salon {
   id: number;
+  partner?: { ownerId: string; businessId: string };
+  specialists?: Specialist[];
   city?: string;
   topCategory: string;
   category: string;
@@ -30,7 +32,7 @@ export interface Salon {
 
 export interface SalonBranch { id: string; name: string; address: string; hours?: string; phone?: string }
 
-export interface Service { id: number; name: string; category?: string; price: number; duration: string }
+export interface Service { id: number; partnerServiceId?: string; name: string; category?: string; price: number; duration: string }
 
 export function groupServices(services: Service[]): { name: string; services: Service[] }[] {
   if (!services.some((service) => service.category)) return [{ name: "", services }];
@@ -44,6 +46,8 @@ export function groupServices(services: Service[]): { name: string; services: Se
 
 export interface Specialist {
   id: number;
+  partnerStaffId?: string;
+  partnerBranchId?: string;
   topCategory: string;
   name: string;
   title: string;
@@ -75,5 +79,6 @@ export function findSalonForSpecialist(master: Specialist): Salon | undefined {
 }
 
 export function getSpecialistsForSalon(salon: Salon): Specialist[] {
+  if (salon.specialists) return salon.specialists;
   return specialists.filter((master) => findSalonForSpecialist(master)?.id === salon.id);
 }

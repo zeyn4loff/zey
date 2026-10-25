@@ -61,6 +61,7 @@ export default function Header() {
                                     {item.label}
                                 </Link>
                             ))}
+                            <Link to="/for-business" className="flex h-9 items-center justify-center rounded-xl px-3.5 text-center font-plus-jakarta text-xs! font-bold leading-none transition-colors hover:bg-black/10">Partnyorlar üçün</Link>
                         </nav>
 
                         <LanguageIndicator />
